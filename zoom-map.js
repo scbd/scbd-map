@@ -16,15 +16,17 @@ define(['text!./zoom-map.html', 'app', 'lodash',
       restrict: 'E',
       template: template,
       //replace: true,
-      scope: {
-        zoomTo: '=zoomTo',
-      },
+      // scope: {
+      //   zoomTo: '=zoomTo',
+      // },
       require: '^zoomMap',
       //=======================================================================
       //
       //=======================================================================
       link: function($scope, $element, $attr, zoomMap) {
 
+        if($attr.zoomTo)
+          $scope.zoomTo=$attr.zoomTo;
         $scope.items = [];
         mapDataService.initData($attr.mapId+'-'+$scope.zoomTo);
         setAttributes();

@@ -98,7 +98,7 @@ define(['app', 'lodash'], function(app, _) {
           if(attrs.homeButton==='false'  || attrs.homeButton==='true' )
             mapData[mapId].zoomControl.homeButtonEnabled = attrs.homeButton;
 
-console.log(mapData[mapId]);
+
           // if(attrs.smallMap.enabled)
           //     mapData[mapId].smallMap.enabled=attrs.smallMap.enabled;
 
