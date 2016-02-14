@@ -2,12 +2,14 @@ define(['app', 'lodash'], function(app, _) {
   'use strict';
 
   app.factory('mapData', [function() {
-    var mapData = [];
-    var returnObject = {};
+    var mapData = {};
+
     if (window.innerWidth <= 600)
       var isXS = true;
 
-    var images = [{
+    var images = {};
+
+    var euImageLabel = [{
       "label": "EU",
       "latitude": -5.02,
       "longitude": -167.66
@@ -15,19 +17,19 @@ define(['app', 'lodash'], function(app, _) {
 	];
 
 
-		initData();
+
 
     //=======================================================================
     //
     //=======================================================================
-    function initData() {
+    function initData(mapId) {
       var zoomTop = '10';
       var zoomRight = '10';
       if (isXS) {
         zoomTop = '40%';
         zoomRight = 10;
       }
-      mapData = {
+      mapData[mapId] = {
         "type": "map",
         "theme": "light",
         "responsive": {
@@ -69,18 +71,44 @@ define(['app', 'lodash'], function(app, _) {
           "buttonFillAlpha": 1,
         },
       }; //
-      mapData.dataProvider.images = _.clone(images);
+      mapData[mapId].dataProvider.images=[];
+      mapData[mapId].dataProvider.images.push(euImageLabel);
     } //$scope.initMap
+
+    function setAttrubutes(mapId,attrs){
+          if(attrs.color)
+              mapData[mapId].areasSettings.color=attrs.color;
+
+          if(attrs.selectedColor)
+              mapData[mapId].areasSettings.selectedColor=attrs.selectedColor;
+
+          if(attrs.rollOverColor)
+              mapData[mapId].areasSettings.rollOverColor=attrs.rollOverColor;
+
+          // if(attrs.smallMap.enabled)
+          //     mapData[mapId].smallMap.enabled=attrs.smallMap.enabled;
+
+
+    }
     //=======================================================================
     //
     //=======================================================================
-    function loadImage(image) {
+    function loadImage(mapId,image) {
 
-        mapData.dataProvider.images.push({label:image.code,latitude:image.lat,longitude:image.long,scbdData:image.scbdData});
+        mapData[mapId].dataProvider.images.push({latitude:image.lat,longitude:image.long,scbdData:image.scbdData});
 
+    }
+    //=======================================================================
+    //
+    //=======================================================================
+    function getMapData(mapId) {
+        return mapData[mapId];
     }
 
     return {
+      initData:initData,
+      getMapData:getMapData,
+      setAttrubutes:setAttrubutes,
       mapData: mapData,
       loadImage:loadImage
     };
