@@ -22,8 +22,17 @@ define(['app',
     //=======================================================================
     //
     //=======================================================================
-    function loadCountries(data) {
+    function loadCountries(mapId,data) {
       countries = data;
+      return bindCountryData(mapId).then(function(mapCtrl) {
+
+        mapCtrl.getMap().validateData();
+        if (mapCtrl.getAttrs().zoomInOnLoad)
+          mapCtrl.getMap().zoomIn();
+
+        mapCtrl.pinMap();
+        return;
+      });
     }
 
     //=======================================================================
@@ -100,15 +109,7 @@ define(['app',
       if (mapCtrl.getCtrlMapId()) {
 
         mapCtrls[mapCtrl.getCtrlMapId()] = mapCtrl;
-        bindCountryData(mapCtrl.getCtrlMapId()).then(function(mapCtrl) {
 
-          mapCtrl.getMap().validateData();
-          if (mapCtrl.getAttrs().zoomInOnLoad)
-            mapCtrl.getMap().zoomIn();
-
-          mapCtrl.pinMap();
-
-        });
 
       } else
         throw "Error: thrying to register a map controler in the ammap3Service with out  a mapID";
@@ -308,6 +309,10 @@ define(['app',
         else
           return false;
       });
+      if(!image){
+        console.log('Country missing popover information:', cCode)
+        return;
+      };
       mapCtrls[mapId].closePopovers();
       //console.log('X',mapCtrls[mapId].getMap().moveDown());
       if (image.externalElement)
