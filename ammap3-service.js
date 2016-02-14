@@ -318,13 +318,13 @@ define(['app',
       if (image.externalElement)
         setTimeout(function() {
           $(image.externalElement).children('#pin-' + cCode).popover('show');
-        }, 1500);
+        }, 2200);
       else
         console.log('Country missing popover information:', cCode);
 
       setTimeout(function() {
         mapCtrls[mapId].getMap().moveUp();
-      }, 1700);
+      }, 2500);
 
     } // setPinImage
 
