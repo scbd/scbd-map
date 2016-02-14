@@ -23,6 +23,8 @@ define(['app', 'lodash'], function(app, _) {
     //
     //=======================================================================
     function initData(mapId) {
+      mapData = {};
+      images = {};
       var zoomTop = '10';
       var zoomRight = '10';
       if (isXS) {
@@ -85,6 +87,18 @@ define(['app', 'lodash'], function(app, _) {
           if(attrs.rollOverColor)
               mapData[mapId].areasSettings.rollOverColor=attrs.rollOverColor;
 
+              if (attrs.zoomControlRight)
+                  mapData[mapId].zoomControl.right = attrs.zoomControlRight;
+
+                if (attrs.zoomControlTop)
+                  mapData[mapId].zoomControl.top = attrs.zoomControlTop;
+
+                  if (attrs.zoomControlAlpha)
+                    mapData[mapId].zoomControl.buttonFillAlpha = String(attrs.zoomControlAlpha);
+          if(attrs.homeButton==='false'  || attrs.homeButton==='true' )
+            mapData[mapId].zoomControl.homeButtonEnabled = attrs.homeButton;
+
+console.log(mapData[mapId]);
           // if(attrs.smallMap.enabled)
           //     mapData[mapId].smallMap.enabled=attrs.smallMap.enabled;
 

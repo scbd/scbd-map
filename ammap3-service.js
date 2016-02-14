@@ -107,7 +107,8 @@ define(['app',
     function setMapCtrl(mapCtrl) {
 
       if (mapCtrl.getCtrlMapId()) {
-
+        if(mapCtrls[mapCtrl.getCtrlMapId()])
+          mapCtrls[mapCtrl.getCtrlMapId()]={};
         mapCtrls[mapCtrl.getCtrlMapId()] = mapCtrl;
 
 
@@ -342,6 +343,25 @@ define(['app',
 
       mapCtrls[mapId].getMap().clickMapObject(mapObject);
     } // closePopovers
+
+    //=======================================================================
+    //
+    //=======================================================================
+    function zoomToMapArea(mapId, areaId) {
+      if (!mapId) throw "zoomToMapArea Error: trying to run zoomToMapArea without specifiing a map instance with mapId";
+      if (!areaId) throw "zoomToMapArea Error: trying to run zoomToMapArea without specifiing an areaId";
+
+      whenMapCtrlLoaded(mapId).then(
+        function(ctrl) {
+          console.log(ctrl);
+          ctrl.zoomToMapArea(areaId);
+        },
+        function() {
+          throw "zoomToMapArea Error: map failed to load with mapId:" + mapId+" when attempting to zoomToMapArea";
+        }
+      );
+
+    } // closePopovers
     //=======================================================================
     //
     //=======================================================================
@@ -375,6 +395,7 @@ define(['app',
     } // randomCountry
 
     return {
+      zoomToMapArea:zoomToMapArea,
       randomCountry: randomCountry,
       eachCountry: eachCountry,
       clickMapObject: clickMapObject,
