@@ -394,6 +394,20 @@ define(['app',
       }
     } // randomCountry
 
+    function clear(mapId){
+        mapCtrls[mapId].getMap().clearMap();
+
+        countries = null;
+        mapObject = {};
+        mapCtrls = {};
+        pinLibrary = ['default', 'invisi-pin'];
+        pinImgLibrary = [];
+        pinImgLibrary['invisi-pixel'] = '/app/libs/scbd-map/images/pins/invisi-pin.svg';
+
+        pinPopOverLibrary = [];
+        pinPopOverLibrary['default'] = defaultPinPopOver;
+    }
+
     return {
       zoomToMapArea:zoomToMapArea,
       randomCountry: randomCountry,
@@ -410,7 +424,9 @@ define(['app',
       loadCountries: loadCountries,
       getCountries: getCountries,
       setGlobalClickListener: setGlobalClickListener,
-      setCountryClickListener: setCountryClickListener
+      setCountryClickListener: setCountryClickListener,
+
+      clear                     : clear
     };
 
   }]);

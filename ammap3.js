@@ -88,6 +88,11 @@ define(['text!./ammap3.html', 'app', 'lodash',
           mapDataService.setAttrubutes($scope.attr.mapId, $scope.attr);
         }
 
+        $scope.$on('$destroy', function(){
+              $scope.map.clearMap();
+              $('#' + $attr.mapId).remove();
+              $scope.map = undefined;
+        });
       }, //link
 
 
