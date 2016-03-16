@@ -28,15 +28,15 @@ define(['text!./zoom-map.html', 'app', 'lodash',
         if($attr.zoomTo)
           $scope.zoomTo=$attr.zoomTo;
         $scope.items = [];
-        mapDataService.initData($attr.mapId+'-'+$scope.zoomTo);
+        mapDataService.initData($attr.mapId);
         setAttributes();
         //if($element.find('#mapdiv')[0])
-          $('#mapdiv').attr('id', $attr.mapId+'-'+$scope.zoomTo);
+          $('#mapdiv').attr('id', $attr.mapId);
         //else console.log('#mapdiv');
 
 
-        $scope.map = AmCharts.makeChart($attr.mapId+'-'+$scope.zoomTo, mapDataService.getMapData($attr.mapId+'-'+$scope.zoomTo)); //jshint ignore:line
-        $scope.map.write($attr.mapId+'-'+$scope.zoomTo);
+        $scope.map = AmCharts.makeChart($attr.mapId, mapDataService.getMapData($attr.mapId)); //jshint ignore:line
+        $scope.map.write($attr.mapId);
 
         $scope.map.addListener("clickMapObject", function(event) {
 
@@ -108,8 +108,15 @@ define(['text!./zoom-map.html', 'app', 'lodash',
             $scope.attr.miniMap = $attr.miniMap;
           else
             $scope.attr.miniMap = 'false';
-          mapDataService.setAttrubutes($scope.attr.mapId+'-'+$scope.zoomTo, $scope.attr);
+          mapDataService.setAttrubutes($scope.attr.mapId, $scope.attr);
         }
+        
+        
+        $scope.$on('$destroy', function(){
+              $scope.map.clearMap();
+              $('#' + $attr.mapId).remove();
+              $scope.map = undefined;
+        });
 
       }, //link
 
