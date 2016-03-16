@@ -9,12 +9,12 @@ define(['app', 'lodash'], function(app, _) {
 
     var images = {};
 
-    var euImageLabel = [{
-      "label": "EU",
-      "latitude": -5.02,
+    var euImageLabel = {
+      "label": "European Union",
+      "latitude": -3.02,
       "longitude": -167.66
     }
-	];
+	;
 
 
 
@@ -34,6 +34,7 @@ define(['app', 'lodash'], function(app, _) {
       mapData[mapId] = {
         "type": "map",
         "theme": "light",
+        "zoomDuration":0,
         "responsive": {
           "enabled": true
         },
@@ -108,7 +109,7 @@ define(['app', 'lodash'], function(app, _) {
     //
     //=======================================================================
     function loadImage(mapId,image) {
-
+        if(!mapData[mapId].dataProvider.images[0]) mapData[mapId].dataProvider.images.push(euImageLabel);
         mapData[mapId].dataProvider.images.push({latitude:image.lat,longitude:image.long,scbdData:image.scbdData});
 
     }

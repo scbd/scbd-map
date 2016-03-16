@@ -56,6 +56,7 @@ define(['app',
           var lat;
           var long;
           var country = 0;
+          //mapData.initData(mapId);
           _.each(mapCtrls[mapId].getMap().dataProvider.areas, function(mapArea) {
 
 
@@ -319,13 +320,13 @@ define(['app',
       if (image.externalElement)
         setTimeout(function() {
           $(image.externalElement).children('#pin-' + cCode).popover('show');
-        }, 2200);
+        }, 100);
       else
         console.log('Country missing popover information:', cCode);
 
       setTimeout(function() {
         mapCtrls[mapId].getMap().moveUp();
-      }, 2500);
+      }, 100);
 
     } // setPinImage
 
@@ -343,7 +344,21 @@ define(['app',
 
       mapCtrls[mapId].getMap().clickMapObject(mapObject);
     } // closePopovers
+    //=======================================================================
+    //
+    //=======================================================================
+    function selectObject(mapId, mapObject) {
 
+      mapCtrls[mapId].getMap().selectObject(mapObject);
+    } // closePopovers
+    //=======================================================================
+    //
+    //=======================================================================
+    function getMapObject(mapId, objId) {
+
+      return mapCtrls[mapId].getMapObject(objId);
+
+    } // closePopovers
     //=======================================================================
     //
     //=======================================================================
@@ -409,10 +424,12 @@ define(['app',
     }
 
     return {
+      getMapObject:getMapObject,
       zoomToMapArea:zoomToMapArea,
       randomCountry: randomCountry,
       eachCountry: eachCountry,
       clickMapObject: clickMapObject,
+      selectObject: selectObject,
       closePopovers: closePopovers,
       openCountryPopup: openCountryPopup,
       setPinToPoint: setPinToPoint,
