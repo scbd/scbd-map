@@ -178,7 +178,7 @@ define(['text!./zoom-map.html', 'app', 'lodash',
           var  mapObject={};
 
           mapObject= getMapObject(areaId.toUpperCase());
-console.log('mapObject',mapObject);
+
           $scope.map.clickMapObject(mapObject);
         }//
         //=======================================================================

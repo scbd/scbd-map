@@ -362,6 +362,14 @@ define(['app',
     //=======================================================================
     //
     //=======================================================================
+    function validateData(mapId) {
+
+      return mapCtrls[mapId].getMap().validateData();
+
+    } // closePopovers
+    //=======================================================================
+    //
+    //=======================================================================
     function zoomToMapArea(mapId, areaId) {
       if (!mapId) throw "zoomToMapArea Error: trying to run zoomToMapArea without specifiing a map instance with mapId";
       if (!areaId) throw "zoomToMapArea Error: trying to run zoomToMapArea without specifiing an areaId";
@@ -424,6 +432,7 @@ define(['app',
     }
 
     return {
+      validateData:validateData,
       getMapObject:getMapObject,
       zoomToMapArea:zoomToMapArea,
       randomCountry: randomCountry,
