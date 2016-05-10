@@ -109,13 +109,43 @@ define(['text!./ammap3.html', 'app', 'lodash',
           // get map object
           var map = $scope.map;
           var cCode = '';
+          var country=false;
           // go through all of the images
           for (var x in map.dataProvider.images) {
-            if (x !== $(pin).data('i'))
+            if (x !== $(pin).data('i')){
               if (map.dataProvider.images[x].scbdData)
                 cCode = map.dataProvider.images[x].scbdData.code;
+            }
+            if($($scope.map.dataProvider.images[x].externalElement).children('.popover').hasClass('in')){
+
+              country = getMapObject(cCode);
+              if($scope.map.checkIfSelected(country)){
+                  country =_.findWhere($scope.map.dataProvider.areas, {id : cCode});
+                  country.colorReal = country.baseSettings.color;
+                  country.validate();
+                  country.mouseEnabled = true;
+                  country.balloonText = '[[title]]';
+                  $scope.map.selectObject($scope.map.dataProvider.images[x]);
+              }
+            }
             $($scope.map.dataProvider.images[x].externalElement).children('#pin-' + cCode).popover('hide');
+
           }
+
+          // if(!pin){
+          //   _.each( $scope.map.dataProvider.areas,function(country){
+          //     //if(country.id==='CA')
+          //
+          //       if($scope.map.checkIfSelected(country) ){
+          //       //     console.log(country);
+          //       //   country.colorReal = country.color='#ffffff';country.baseSettings.color;
+          //       //   country.validate();
+          //       // console.log(country);
+          //       //console.log( $($scope.map.dataProvider.images[x].externalElement).children('#pin-' + country.id));
+          //       $scope.map.returnInitialColor(country);
+          //     }
+          //   });
+          // }
         } //closePopovers(pin)
 
         //=======================================================================
@@ -128,7 +158,7 @@ define(['text!./ammap3.html', 'app', 'lodash',
 
           // go through all of the images
           for (var x in map.dataProvider.images) {
-            if (x === 0) continue;
+            if (x === '0') continue;
 
             var image = map.dataProvider.images[x];
 
