@@ -18,6 +18,61 @@ define(['app',
     var pinPopOverLibrary = [];
     pinPopOverLibrary['default'] = defaultPinPopOver;
 
+    var exceptionRegionMapping = {
+         AI : 'GB', //Anguilla
+         AS : 'US', //American Samoa
+         AW : 'NL', //Aruba
+         AX : 'FI', //Aland Islands
+         BL : 'FR', //Saint Barthelemy
+         BM : 'GB', //Bermuda
+         BQ : 'NL', //Bonaire, Saint Eustachius and Saba
+         BV : 'NO', //Bouvet Island
+         CC : 'AU', //Cocos (Keeling) Islands
+         CW : 'NL', //Curaçao
+         CX : 'AU', //Christmas Island
+         EH : 'MA', //Western Sahara
+         FK : 'GB', //Falkland Islands
+         FO : 'DK', //Faroe Islands
+         GF : 'FR', //French Guiana
+         GG : 'GB', //Guernsey
+         GI : 'GB', //Gibraltar
+         GL : 'DK', //Greenland
+         GO : 'FR', //Glorioso Islands
+         GP : 'FR', //Guadeloupe
+         GS : 'GB', //South Georgia and South Sandwich Islands
+         GU : 'US', //Guam
+         HK : 'CN', //Hong Kong
+         HM : 'AU', //Heard Island and McDonald Islands
+         IM : 'GB', //Isle of Man
+         IO : 'GB', //British Indian Ocean Territory
+         JE : 'GB', //Jersey
+         JU : 'FR', //Juan De Nova Island
+         XK : 'RS', //Kosovo
+         KY : 'GB', //Cayman Islands
+         MF : 'FR', //Saint Martin
+         MO : 'CN', //Macau
+         MP : 'US', //Northern Mariana Islands
+         MQ : 'FR', //Martinique
+         MS : 'GB', //Montserrat
+         NC : 'FR', //New Caledonia
+         NF : 'AU', //Norfolk Island
+         PM : 'FR', //Saint Pierre and Miquelon
+         PN : 'GB', //Pitcairn Islands
+         PR : 'US', //Puerto Rico
+         RE : 'FR', //Reunion
+         SH : 'GB', //Saint Helena
+         SJ : 'NO', //Svalbard and Jan Mayen
+         SX : 'NL', //Sint Maarten
+         TC : 'GB', //Turks and Caicos Islands
+         TF : 'FR', //French Southern and Antarctic Lands
+         TK : 'NZ', //Tokelau
+         TW : 'CN', //Taiwan
+         VG : 'GB', //British Virgin Islands
+         VI : 'US', //US Virgin Islands
+         WF : 'FR', //Wallis and Futuna
+         YT : 'FR' //Mayotte
+    };
+
 
     //=======================================================================
     //
@@ -67,14 +122,26 @@ define(['app',
             if (!country) {
               //country = normalizeCountryData({});
               country={};
+
+              if(exceptionRegionMapping[mapArea.id]){
+                  var cot = _.find(countries, function(c) {
+                                return (c.code === exceptionRegionMapping[mapArea.id]);
+                              });
+                if(cot){
+                    _.extend(country, cot);
+                }
+                country.exceptionCountry = cot.code.toLowerCase();
+
+              }
               country.code = mapArea.id;
+              country.codeLower = mapArea.id.toLowerCase();
             } else
               country.nameLocalized = country.name[locale];
 
 
             //mapCtrls[mapId].getMapObject(country.code).scbdData=country;
-            long = mapCtrls[mapId].getMap().getAreaCenterLongitude(mapCtrls[mapId].getMapObject(country.code));
-            lat = mapCtrls[mapId].getMap().getAreaCenterLatitude(mapCtrls[mapId].getMapObject(country.code));
+            long = mapCtrls[mapId].getMap().getAreaCenterLongitude(mapCtrls[mapId].getMapObject(mapArea.id));
+            lat = mapCtrls[mapId].getMap().getAreaCenterLatitude(mapCtrls[mapId].getMapObject(mapArea.id));
 
             image.lat = lat;
             image.long = long;
@@ -90,7 +157,7 @@ define(['app',
           return deferred.promise;
         }
 
-      }, 500);
+      }, 0);
 
 
       setTimeout(function() {
@@ -307,7 +374,15 @@ define(['app',
     //=======================================================================
     function openCountryPopup(mapId, cCode) {
       var image = _.find(mapCtrls[mapId].getMap().dataProvider.images, function(img) {
-        if (img.scbdData && img.scbdData.code === cCode) return true;
+
+          if(img.scbdData && _.contains(img.scbdData.exceptionRegion, cCode)){
+              console.log(img.scbdData);
+          }
+
+        if (img.scbdData && (img.scbdData.code === cCode ||
+            (exceptionRegionMapping[cCode] &&  _.contains(img.scbdData.exceptionRegion, cCode) &&
+             img.scbdData.code === exceptionRegionMapping[cCode])))
+            return true;
         else
           return false;
       });
@@ -452,7 +527,8 @@ define(['app',
       setGlobalClickListener: setGlobalClickListener,
       setCountryClickListener: setCountryClickListener,
 
-      clear                     : clear
+      clear                     : clear,
+      exceptionRegionMapping    : exceptionRegionMapping
     };
 
   }]);

@@ -40,10 +40,15 @@ define(['text!./zoom-map.html', 'app', 'lodash',
 
         $scope.map.addListener("clickMapObject", function(event) {
 
-            if(event.mapObject.id != $scope.zoomTo)
-            $timeout(function(){
-                $location.url('/countries/'+event.mapObject.id.toLowerCase());
-            });
+            if(event.mapObject.id != $scope.zoomTo){
+                var countryCode = event.mapObject.id;
+                if(ammap3Service.exceptionRegionMapping[event.mapObject.id]){
+                    countryCode = ammap3Service.exceptionRegionMapping[event.mapObject.id];
+                }
+                $timeout(function(){
+                    $location.url('/countries/'+countryCode.toLowerCase());
+                });
+            }
         });
         if ($scope.zoomTo)
           $scope.map.clickMapObject(zoomMap.getMapObject(_.clone($scope.zoomTo).toUpperCase()));
@@ -110,8 +115,8 @@ define(['text!./zoom-map.html', 'app', 'lodash',
             $scope.attr.miniMap = 'false';
           mapDataService.setAttrubutes($scope.attr.mapId, $scope.attr);
         }
-        
-        
+
+
         $scope.$on('$destroy', function(){
               $scope.map.clearMap();
               $('#' + $attr.mapId).remove();
